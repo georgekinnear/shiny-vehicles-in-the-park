@@ -113,28 +113,64 @@ ui <- fluidPage(
       div.item_panel { padding: 1em 2em; border: 1px solid #ccc; box-shadow: 3px 4px 15px 0px #0000002b; overflow: auto;}
       div.item_content {margin-top: 1em; }
       #chooseLeft_comment-label, #chooseRight_comment-label { color: #999; font-weight: normal; font-style: italic; margin-top: 1em; }
-      .comparison-image { width: 100%; }
+      
+#judging_comment-label { color: #999; font-weight: normal; font-style: italic; margin-top: 1em; }
+.comparison-image { width: 100%; }
+.cj_slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.cj_slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #003399;
+  cursor: pointer;
+}
+
+.cj_slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #003399;
+  cursor: pointer;
+}
+/* hide the shiny slider features we don't want */
+.irs-min, .irs-max, .irs-single, .irs-bar { display:none !important; }
+#choice_slider-label {display:none !important;}
+
+.design-comment { color: #ccc; font-style: italic;}
     "))
   ),
   
   # Navbar
   #tags$div(class = "navbar navbar-default navbar-fixed-top",
-  tags$div(class = "navbar navbar-default", style = "margin: -2px -15px",
-           #tags$p(class = "navbar-text", id = "tab0", "Comparing proofs"),
-           tags$p(class = "navbar-text", id = "tab0", actionLink("help", label = "Comparisons")),
-           tags$ul(class = "nav navbar-nav nav-pills",
-                   tags$li(role = "presentation", class = "disabled", id = "tab1",
-                           tags$a(href = "#", "Step 1")),
-                   tags$li(role = "presentation", class = "disabled", id = "tab2",
-                           tags$a(href = "#", "Step 2")),
-                   tags$li(role = "presentation", class = "disabled", id = "tab3",
-                           tags$a(href = "#", "Step 3"))
-           ),
-           # tags$ul(class = "nav navbar-nav navbar-right",
-           #         tags$li(role = "presentation", id = "help", tags$a(href = "#", icon("question-circle"))))
-           # tags$ul(class = "nav navbar-nav navbar-right",
-           #         tags$li(role = "presentation", id = "help", actionLink("help", label = icon("question-circle"))))
-  ),
+  # tags$div(class = "navbar navbar-default", style = "margin: -2px -15px",
+  #          #tags$p(class = "navbar-text", id = "tab0", "Comparing proofs"),
+  #          tags$p(class = "navbar-text", id = "tab0", actionLink("help", label = "Comparisons")),
+  #          tags$ul(class = "nav navbar-nav nav-pills",
+  #                  tags$li(role = "presentation", class = "disabled", id = "tab1",
+  #                          tags$a(href = "#", "Step 1")),
+  #                  tags$li(role = "presentation", class = "disabled", id = "tab2",
+  #                          tags$a(href = "#", "Step 2")),
+  #                  tags$li(role = "presentation", class = "disabled", id = "tab3",
+  #                          tags$a(href = "#", "Step 3"))
+  #          ),
+  #          # tags$ul(class = "nav navbar-nav navbar-right",
+  #          #         tags$li(role = "presentation", id = "help", tags$a(href = "#", icon("question-circle"))))
+  #          # tags$ul(class = "nav navbar-nav navbar-right",
+  #          #         tags$li(role = "presentation", id = "help", actionLink("help", label = icon("question-circle"))))
+  # ),
   # Version of the navbar done with pills
   # fluidRow(
   #   column(12, 
@@ -189,9 +225,7 @@ server <- function(input, output, session) {
   #
   output$pageContent <- renderUI({
     tagList(
-      #p(paste("Judge group:", judge_group)),
       includeMarkdown("step0-participant-info.md"),
-      #proofs %>% select(item_num) %>% display_item(),
       fluidRow(
         column(4, offset = 4, actionButton("consentButton", "I consent", class = "btn-success btn-lg btn-block", icon = icon("check")))
       ),
@@ -372,18 +406,19 @@ server <- function(input, output, session) {
     # update the page content
     output$pageContent <- renderUI({
       tagList(
-        h3(assigned_study[["judging_prompt"]]),
         htmlOutput("judging_progress"),
+        h3(assigned_study[["judging_prompt"]]),
+        p("Both modes of judging are shown here for convenience - participants will only see one!", class = "design-comment"),
+        p("Binary decisions", class = "design-comment"),
         fluidRow(
-          column(6, htmlOutput("item_left")),
-          column(6, htmlOutput("item_right"))
+          column(12, htmlOutput("binary"))
+        ),
+        p("Slider rating decisions (currently set to -10 to 10):", class = "design-comment"),
+        fluidRow(
+          column(12, htmlOutput("slider"))
         ),
         fluidRow(
-          htmlOutput("slider")
-        ),
-        # TODO - make this reset when each judgement is recorded
-        fluidRow(
-          textAreaInput("judging_comment", label = "Comments (optional)", width = "100%", height = "4em")
+          column(8, offset = 2, htmlOutput("comments"))
         )
       )
     })
@@ -393,31 +428,49 @@ server <- function(input, output, session) {
     # print(pair)
   })
   
-  display_item <- function(item_id) {
-    the_item <- scripts %>% filter(item_num == item_id)
-    if(str_length(the_item$html %>% as.character()) > 0) {
-      return(the_item$html %>% as.character() %>% HTML() %>% withMathJax())
-    } else {
-      return(img(src = the_item$img_src, class = "comparison-image"))
+  vehicle_name <- function(item_id) {
+    scripts %>% filter(item_num == item_id) %>% pull(item_name) %>% as.character()
+  }
+
+  output$comments <- renderUI({
+    if(pair$pair_num > 0) {
+      textAreaInput("judging_comment", label = "Comments (optional)", width = "100%", height = "4em")
     }
-  }
-  render_item_panel <- function(button_id, item_id) {
-    # TODO - change this to deal with the slider condition
-    tagList(
-      div(class = "item_panel",
-          fluidRow(
-            actionButton(button_id, "Choose this one", class = "btn-block btn-primary")
-          ),
-          div(class = "item_content", display_item(item_id))
-      )
-    )
-  }
-  
-  output$item_left <- renderUI({
-    render_item_panel("chooseLeft", pair$left)
   })
-  output$item_right <- renderUI({
-    render_item_panel("chooseRight", pair$right)
+  
+  output$binary <- renderUI({
+    if(judging_method == "binary" | TRUE) { # temporarily show this all the time
+      fluidRow(
+        column(6, actionButton(
+          "chooseLeft",
+          label = vehicle_name(pair$left),
+          class = "btn-block btn-primary"
+        )),
+        column(6, actionButton(
+          "chooseRight",
+          label = vehicle_name(pair$right),
+          class = "btn-block btn-primary"
+        ))
+      )
+    }
+  })
+  
+  output$slider <- renderUI({
+    if(judging_method == "slider" | TRUE) { # temporarily show this all the time
+      tagList(
+        fluidRow(
+          column(3, p(vehicle_name(pair$left), style = "text-align:left;")),
+          column(6, sliderInput("choice_slider", "",
+                                min = -10, max = 10, value = 0, ticks = FALSE, width = "100%")
+          ),
+          #column(6, tags$input(id = "choice_slider", type = "range", min = "-10", max = "10", class = "cj_slider")),
+          column(3, p(vehicle_name(pair$right), style = "text-align:right;"))
+        ),
+        fluidRow(
+          column(4, offset = 4, p(actionButton("submit_slider", "Next", class = "btn-primary"), style = "text-align: center;"))
+        )
+      )
+    }
   })
   
   output$judging_progress <- renderPrint({
@@ -447,15 +500,15 @@ server <- function(input, output, session) {
     pair$start_time <- Sys.time()
   }
   
-  record_judgement <- function(pair, winner = "left", loser = "right") {
-    # TODO - split this into two versions, for binary/slider options i.e. record_judgement_slider should save the strength of choice to the `score` column
-    # print(pair)
-    print(paste(pair$left, pair$right, "winner:", winner))
+  elapsed_time <- function() {
     start_time <- pair$start_time
     current_time <- Sys.time()
-    #print(start_time)
-    #print(current_time)
-    time_taken = as.integer((current_time - start_time) * 1000)
+    return( as.integer((current_time - start_time) * 1000) )
+  }
+  
+  record_judgement_binary <- function(pair, winner = "left", loser = "right") {
+    print(paste(pair$left, pair$right, "winner:", winner))
+    time_taken = elapsed_time()
     
     winning_item = ifelse(winner == "left", pair$left, pair$right)
     losing_item = ifelse(loser == "left", pair$left, pair$right)
@@ -477,12 +530,36 @@ server <- function(input, output, session) {
       append = TRUE
     )
   }
+  record_judgement_slider <- function(pair, score = 0) {
+    print(paste(pair$left, pair$right, "score:", score))
+    time_taken = elapsed_time()
+    
+    dbWriteTable(
+      pool,
+      "judgements",
+      tibble(
+        study = session_info$study_id,
+        judge_id = session_info$judge_id,
+        left = pair$left,
+        right = pair$right,
+        score = score,
+        time_taken = time_taken,
+        comment = input$judging_comment
+      ),
+      row.names = FALSE,
+      append = TRUE
+    )
+  }
   observeEvent(input$chooseLeft, {
-    record_judgement(pair, winner = "left", loser = "right")
+    record_judgement_binary(pair, winner = "left", loser = "right")
     update_pair()
   })
   observeEvent(input$chooseRight, {
-    record_judgement(pair, winner = "right", loser = "left")
+    record_judgement_binary(pair, winner = "right", loser = "left")
+    update_pair()
+  })
+  observeEvent(input$submit_slider, {
+    record_judgement_slider(pair, score = input$choice_slider)
     update_pair()
   })
   
