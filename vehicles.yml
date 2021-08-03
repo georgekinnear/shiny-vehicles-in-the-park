@@ -1,0 +1,124 @@
+- item-num: 1
+  item-name: Airplane
+  html: |
+    Airplane
+
+- item-num: 2
+  item-name: Ambulance
+  html: |
+    Ambulance
+
+- item-num: 3
+  item-name: Automobile
+  html: |
+    Automobile
+
+- item-num: 4
+  item-name: Baby Shoulder-Carrier
+  html: |
+    Baby Shoulder-Carrier
+
+- item-num: 5
+  item-name: Baby Stroller
+  html: |
+    Baby Stroller
+
+- item-num: 6
+  item-name: Bicycle
+  html: |
+    Bicycle
+
+- item-num: 7
+  item-name: Bus
+  html: |
+    Bus
+
+- item-num: 8
+  item-name: Canoe
+  html: |
+    Canoe
+
+- item-num: 9
+  item-name: Car
+  html: |
+    Car
+
+- item-num: 10
+  item-name: Carriage
+  html: |
+    Carriage
+
+- item-num: 11
+  item-name: Crutches
+  html: |
+    Crutches
+
+- item-num: 12
+  item-name: Drone
+  html: |
+    Drone
+
+- item-num: 13
+  item-name: Golf Cart
+  html: |
+    Golf Cart
+
+- item-num: 14
+  item-name: Helicopter
+  html: |
+    Helicopter
+
+- item-num: 15
+  item-name: Horse
+  html: |
+    Horse
+
+- item-num: 16
+  item-name: Liferaft
+  html: |
+    Liferaft
+
+- item-num: 17
+  item-name: Moped
+  html: |
+    Moped
+
+- item-num: 18
+  item-name: Pogo Stick
+  html: |
+    Pogo Stick
+
+- item-num: 19
+  item-name: Rollerskate
+  html: |
+    Rollerskate
+
+- item-num: 20
+  item-name: Skateboard
+  html: |
+    Skateboard
+
+- item-num: 21
+  item-name: Toy Car
+  html: |
+    Toy Car
+
+- item-num: 22
+  item-name: Truck
+  html: |
+    Truck
+
+- item-num: 23
+  item-name: Wheelchair
+  html: |
+    Wheelchair
+
+- item-num: 24
+  item-name: WWII Truck
+  html: |
+    WWII Truck
+
+- item-num: 25
+  item-name: Zip-line
+  html: |
+    Zip-line
