@@ -16,12 +16,12 @@
 - item-num: 4
   item-name: Baby Shoulder-Carrier
   html: |
-    Baby Shoulder-Carrier
+    Baby shoulder-carrier
 
 - item-num: 5
   item-name: Baby Stroller
   html: |
-    Baby Stroller
+    Baby stroller
 
 - item-num: 6
   item-name: Bicycle
@@ -36,7 +36,7 @@
 - item-num: 8
   item-name: Canoe
   html: |
-    Canoe
+    Wooden canoe
 
 - item-num: 9
   item-name: Car
@@ -46,12 +46,12 @@
 - item-num: 10
   item-name: Carriage
   html: |
-    Carriage
+    Horse-drawn carriage
 
 - item-num: 11
   item-name: Crutches
   html: |
-    Crutches
+    Pair of crutches
 
 - item-num: 12
   item-name: Drone
@@ -61,7 +61,7 @@
 - item-num: 13
   item-name: Golf Cart
   html: |
-    Golf Cart
+    Golf cart
 
 - item-num: 14
   item-name: Helicopter
@@ -76,7 +76,7 @@
 - item-num: 16
   item-name: Liferaft
   html: |
-    Liferaft
+    Life raft
 
 - item-num: 17
   item-name: Moped
@@ -86,12 +86,12 @@
 - item-num: 18
   item-name: Pogo Stick
   html: |
-    Pogo Stick
+    Pogo stick
 
 - item-num: 19
   item-name: Rollerskate
   html: |
-    Rollerskate
+    Pair of roller skates
 
 - item-num: 20
   item-name: Skateboard
@@ -111,14 +111,14 @@
 - item-num: 23
   item-name: Wheelchair
   html: |
-    Wheelchair
+    Electric wheelchair
 
 - item-num: 24
   item-name: WWII Truck
   html: |
-    WWII Truck
+    A nonfunctioning commemorative truck (e.g. a World War II Truck that has been decorated as a World War II monument)
 
 - item-num: 25
   item-name: Zip-line
   html: |
-    Zip-line
+    Zip line
