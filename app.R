@@ -480,9 +480,18 @@ server <- function(input, output, session) {
           column(3, p(vehicle_name(pair$right), style = "text-align:right;"))
         ),
         fluidRow(
-          column(4, offset = 4, p(actionButton("submit_slider", "Next", class = "btn-primary"), style = "text-align: center;"))
+          column(4, offset = 4, p(actionButton("submit_slider", "Submit decision", class = "btn-primary"), style = "text-align: center;"))
         )
       )
+    }
+  })
+  observe({
+    if (is.null(input$choice_slider) || input$choice_slider == "0") {
+      shinyjs::disable("submit_slider")
+      shinyjs::html("submit_slider", html = "Please move the slider")
+    } else {
+      shinyjs::enable("submit_slider")
+      shinyjs::html("submit_slider", html = "Submit decision")
     }
   })
   
