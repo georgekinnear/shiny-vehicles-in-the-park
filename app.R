@@ -84,13 +84,19 @@ scripts <- read_yaml("vehicles.yml") %>%
   enframe(name = NULL) %>%
   unnest(cols = c("value")) %>% 
   rename_with(~ str_replace(., "-", "_")) %>%
-  rename(markdown = html) %>% 
+  rename(markdown = html)
+
+# add item for the attention check
+scripts <- scripts %>% 
+  add_row(
+    item_num = 0,
+    item_name = "attention_check",
+    markdown = "This is an attention check, please pick this item"
+  ) %>% 
   mutate(html = purrr::map(markdown, ~ markdown::markdownToHTML(
     text = .,
     fragment.only = TRUE
-  ))) 
-
-
+  )))
 
 
 ui <- fluidPage(
@@ -393,7 +399,12 @@ server <- function(input, output, session) {
   
   observeEvent(input$startComparing, {
     
-    pairs <<- make_pairs(pairs_to_make = 20)
+    # pairs <<- make_pairs(pairs_to_make = 100)
+    pairs <<- make_pairs(pairs_to_make = 100) %>% 
+      # add attention checks after pairs 50 and 75
+      add_row(left = 0, right = sample(c(1:25))[1], .after = 50) %>% 
+      add_row(right = 0, left = sample(c(1:25))[1], .after = 75) %>%
+      mutate(pair_num = row_number())
     print(pairs)
     pair$pairs_available <- nrow(pairs)
   
