@@ -113,7 +113,9 @@ ui <- fluidPage(
       div.item_panel { padding: 1em 2em; border: 1px solid #ccc; box-shadow: 3px 4px 15px 0px #0000002b; overflow: auto;}
       div.item_content {margin-top: 1em; }
       #chooseLeft_comment-label, #chooseRight_comment-label { color: #999; font-weight: normal; font-style: italic; margin-top: 1em; }
-      
+/* this is needed so that longer text in the item choice buttons wraps onto new lines */
+.btn { white-space:normal !important; }
+
 #judging_comment-label { color: #999; font-weight: normal; font-style: italic; margin-top: 1em; }
 .comparison-image { width: 100%; }
 .cj_slider {
@@ -429,7 +431,7 @@ server <- function(input, output, session) {
   })
   
   vehicle_name <- function(item_id) {
-    scripts %>% filter(item_num == item_id) %>% pull(item_name) %>% as.character()
+    scripts %>% filter(item_num == item_id) %>% pull(markdown) %>% as.character()
   }
 
   output$comments <- renderUI({
