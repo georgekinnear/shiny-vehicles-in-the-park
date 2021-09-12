@@ -3,6 +3,7 @@ library(shiny)
 library(shinyjs)
 library(pool)
 library(yaml)
+library(DT)
 
 # Connection info is stored in dbconfig.yml (not in public repo) for security
 dbconfig <- yaml::read_yaml("dbconfig.yml")
@@ -33,52 +34,6 @@ studies <- pool %>%
 #   "nuisance_slider",                   "Which of the two examples would be the biggest nuisance in a park?",        "slider",            20L,                  100L
 # )
 
-#
-# Check on judging progress
-#
-all_existing_judgements <- pool %>% 
-  tbl("judgements") %>% 
-  select(-contains("comment")) %>% 
-  collect() %>% 
-  semi_join(studies, by = "study")
-
-study_progress <- all_existing_judgements %>% 
-  group_by(study, judge_id) %>% 
-  tally() %>% 
-  left_join(studies, by = "study") %>% 
-  group_by(study) %>% 
-  summarise(
-    num_judges = n_distinct(judge_id),
-    num_judgements = sum(n)
-  )
-
-study_status <- studies %>% 
-  left_join(study_progress, by = "study") %>% 
-  mutate(across(starts_with("num_"), ~replace_na(.x, 0)))
-
-assign_to_study <- function() {
-  # allocate to one of the study conditions, weighted by current progress
-  study_status %>%
-    # identify the number of judges needed by each condition to meet its target
-    mutate(judge_slots = target_judges - num_judges) %>%
-    # pick the condition with the most open slots
-    slice_max(judge_slots, n = 1, with_ties = FALSE) %>% 
-    #pull(study_id)
-    unlist()
-}
-
-#Check that the assignment is working the way it should
-# simulate_assignment <- function() {
-#   assigned_to <- assign_to_study()[["study"]]
-#   study_status <<- study_status %>%
-#     mutate(num_judges = case_when(study == assigned_to ~ num_judges + 1, TRUE ~ num_judges))
-#   return(assigned_to)
-# }
-# assignments_test <- tibble(iter = c(1:100)) %>%
-#   mutate(study = map_chr(iter, ~ simulate_assignment()))
-# study_status %>%
-#   select(study, num_judges)
-
 scripts <- read_yaml("vehicles.yml") %>%
   purrr::map(as_tibble_row) %>%
   enframe(name = NULL) %>%
@@ -98,6 +53,17 @@ scripts <- scripts %>%
     fragment.only = TRUE
   )))
 
+assign_to_study <- function() {
+  print(study_status %>% mutate(judge_slots = target_judges - num_judges))
+  # allocate to one of the study conditions, weighted by current progress
+  study_status %>%
+    # identify the number of judges needed by each condition to meet its target
+    mutate(judge_slots = target_judges - num_judges) %>%
+    # pick the condition with the most open slots
+    slice_max(judge_slots, n = 1, with_ties = FALSE) %>% 
+    #pull(study_id)
+    unlist()
+}
 
 ui <- fluidPage(
   useShinyjs(),
@@ -177,41 +143,6 @@ ui <- fluidPage(
     "))
   ),
   
-  # Navbar
-  #tags$div(class = "navbar navbar-default navbar-fixed-top",
-  # tags$div(class = "navbar navbar-default", style = "margin: -2px -15px",
-  #          #tags$p(class = "navbar-text", id = "tab0", "Comparing proofs"),
-  #          tags$p(class = "navbar-text", id = "tab0", actionLink("help", label = "Comparisons")),
-  #          tags$ul(class = "nav navbar-nav nav-pills",
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab1",
-  #                          tags$a(href = "#", "Step 1")),
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab2",
-  #                          tags$a(href = "#", "Step 2")),
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab3",
-  #                          tags$a(href = "#", "Step 3"))
-  #          ),
-  #          # tags$ul(class = "nav navbar-nav navbar-right",
-  #          #         tags$li(role = "presentation", id = "help", tags$a(href = "#", icon("question-circle"))))
-  #          # tags$ul(class = "nav navbar-nav navbar-right",
-  #          #         tags$li(role = "presentation", id = "help", actionLink("help", label = icon("question-circle"))))
-  # ),
-  # Version of the navbar done with pills
-  # fluidRow(
-  #   column(12, 
-  #          tags$ul(class = "nav nav-pills",
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab0",
-  #                          tags$a(href = "", tags$strong("Comparing proofs"))),
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab1",
-  #                          tags$a(href = "#", "Step 1")),
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab2",
-  #                          tags$a(href = "#", "Step 2")),
-  #                  tags$li(role = "presentation", class = "disabled", id = "tab3",
-  #                          tags$a(href = "#", "Step 3"))
-  #           )
-  #   )
-  # ),
-  tags$div(class = "clearfix"),
-  
   # Placeholder for page content - the server will update this as needed
   uiOutput("pageContent")
 )
@@ -227,6 +158,39 @@ server <- function(input, output, session) {
   judge_id <- NULL
   judging_method <- NULL
   starting_pair <- NULL # this will be set to 1 by default, but when resuming a session it will record where to start
+  
+  #
+  # Check on judging progress
+  #
+  all_existing_judgements <<- pool %>% 
+    tbl("judgements") %>% 
+    select(-contains("comment")) %>% 
+    collect() %>% 
+    semi_join(studies, by = "study")
+  
+  study_progress <<- all_existing_judgements %>% 
+    group_by(study, judge_id) %>% 
+    tally() %>% 
+    left_join(studies, by = "study") %>% 
+    group_by(study) %>% 
+    summarise(
+      num_judges = n_distinct(judge_id),
+      num_judgements = sum(n)
+    )
+  
+  study_status <<- studies %>% 
+    left_join(study_progress, by = "study") %>% 
+    mutate(across(starts_with("num_"), ~replace_na(.x, 0)))
+  
+  judges <<- pool %>% 
+    tbl("judges") %>% 
+    collect() %>% 
+    left_join(
+      all_existing_judgements %>% 
+        group_by(judge_id) %>% 
+        tally(name = "num_judgements"),
+      by = "judge_id"
+    )
   
   observe({
     query <- parseQueryString(session$clientData$url_search)
@@ -250,9 +214,37 @@ server <- function(input, output, session) {
         # ID is not recognised, so proceed as a new user
         starting_pair <<- 1
       }
+    } else if (!is.null(query[['ADMIN_USER']])) {
+      # TODO - admin dashboard
+      output$pageContent <- renderUI({
+        tagList(
+          navbarPage("CJ Dashboard",
+                     tabPanel("Summary", 
+                              fluidRow(tableOutput("judge_tally")),
+                              fluidRow(tableOutput("summary_table"))
+                     ),
+                     tabPanel("Participants", 
+                              fluidRow(column(12, downloadButton("download_judges", "Download judges.csv"))),
+                              fluidRow(dataTableOutput("participants_table"))
+                     ),
+                     tabPanel("Judgements",
+                              fluidRow(column(12, downloadButton("download_judgements", "Download judgements.csv"))),
+                              fluidRow(dataTableOutput("judgements_table"))
+                     )
+          ),
+          tags$div(class = "clearfix")
+        )
+      })
     } else {
       prolific_id <<- "None"
-      # TODO - quit with some sort of warning
+      # Quit with a warning
+      output$pageContent <- renderUI({
+        tagList(
+          h3("Participant ID not found"),
+          p("The PROLIFIC_PID is missing from the URL."),
+          p("Please return to Prolific and try again."),
+        )
+      })
     }
   })
   
@@ -676,6 +668,48 @@ server <- function(input, output, session) {
     })
   })
 
+  #
+  # Admin dashboard
+  #
+  output$judge_tally <- renderTable({
+    study_progress %>%
+      arrange(study) %>% 
+      separate(study, into = c("prompt", "method"))
+  })
+  output$summary_table <- renderTable({
+    judges %>%
+      select(study_id, judge_id, prolific_id, num_judgements) %>% 
+      arrange(study_id, -num_judgements) %>% 
+      separate(study_id, into = c("prompt", "method"))
+  })
+  
+  output$participants_table <- renderDT(
+    judges %>% select(-shiny_info) %>% arrange(-judge_id),
+    filter = "top",
+    options = list(pageLength = 20),
+    rownames = FALSE
+  )
+  # Downloadable csv of judges dataset ----
+  output$download_judges <- downloadHandler(
+    filename = "judges.csv",
+    content = function(file) {
+      write.csv(judges, file, row.names = FALSE)
+    }
+  )
+  
+  output$judgements_table <- renderDT(
+    all_existing_judgements,
+    filter = "top",
+    options = list(pageLength = 20),
+    rownames = FALSE
+  )
+  # Downloadable csv of judges dataset ----
+  output$download_judgements <- downloadHandler(
+    filename = "judgements.csv",
+    content = function(file) {
+      write.csv(all_existing_judgements, file, row.names = FALSE)
+    }
+  )
   
 }
 
