@@ -629,30 +629,53 @@ server <- function(input, output, session) {
   # Give a message when they reach the required number of comparisons
   # TODO - make this return them to the special Prolific landing page that will mark them as completed
   observe({
-    if (pair$pair_num != 101) return()
-    showModal(modalDialog(
-      title = "Thank you!",
-      p("You have now completed the 100 comparisons needed for the survey."),
-      p("You can continue making further comparisons if you wish, and these will continue to be recorded."),
-      p("When you are ready to stop, please simply close this browser window."),
-      p("If you would like to receive an update about the results of the study, please complete this separate form:"),
-      p(a("https://edinburgh.onlinesurveys.ac.uk/expert-opinions-about-proofs",
-          target="_blank",
-          href="https://edinburgh.onlinesurveys.ac.uk/expert-opinions-about-proofs"), style = "text-align: center;"),
-      p("Thank you for taking part."),
-      easyClose = TRUE
-    ))
+    if(!exists("pair")) return()
+    if (pair$pair_num <= 102) return()
+    
+    # update the page content
+    output$pageContent <- renderUI({
+      tagList(
+        htmlOutput("judging_progress"),
+        h3("Thank you!"),
+        p("You have now completed the comparisons needed for this survey."),
+        p("Thank you for taking part."),
+        p("If you have any comments about the judging process, please leave them here:"),
+        fluidRow(
+          column(8, offset = 2, htmlOutput("final_comments"))
+        ),
+        fluidRow(
+          column(4, offset = 4, actionButton("saveFinalComments", "Save and return to Prolific", class = "btn-success btn-lg btn-block", icon = icon("check")))
+        )
+      )
+    })
   })
-  observeEvent(input$help, {
-    showModal(modalDialog(
-      title = "About this site",
-      p("This study is being run by Dr George Kinnear,
-        from the School of Mathematics at the University of Edinburgh."),
-      p(HTML("If you have any questions about the study, please contact George:
-        <a href=\"mailto:G.Kinnear@ed.ac.uk\">G.Kinnear@ed.ac.uk</a>.")),
-      easyClose = TRUE
-    ))
+  output$final_comments <- renderUI({
+    if(pair$pair_num > 0) {
+      textAreaInput("final_comment", label = "Comments (optional)", width = "100%", height = "6em")
+    }
   })
+  observeEvent(input$saveFinalComments, {
+    dbWriteTable(
+      pool,
+      "comments",
+      tibble(
+        judge_id = session_info$judge_id,
+        final_comments = input$final_comment
+      ),
+      row.names = FALSE,
+      append = TRUE
+    )
+    prolific_completion_url <- "https://app.prolific.co/submissions/complete?cc=I2PWSFRG"
+    output$pageContent <- renderUI({
+      tagList(
+        p("Saved", style = "text-align:center"),
+        p("Redirecting to Prolific", style = "text-align:center"),
+        p(prolific_completion_url, style = "text-align:center"),
+        tags$script(paste0('window.location.replace("',prolific_completion_url,'");'))
+      )
+    })
+  })
+
   
 }
 
