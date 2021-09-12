@@ -190,6 +190,11 @@ server <- function(input, output, session) {
         group_by(judge_id) %>% 
         tally(name = "num_judgements"),
       by = "judge_id"
+    ) %>% 
+    left_join(
+      pool %>% tbl("comments") %>% 
+        collect(),
+      by = "judge_id"
     )
   
   observe({
