@@ -156,6 +156,22 @@ ui <- fluidPage(
 /* hide the shiny slider features we don't want */
 .irs-min, .irs-max, .irs-single, .irs-bar { display:none !important; }
 #choice_slider-label {display:none !important;}
+.slider_left {
+  text-align: left;
+  width: 90%;
+  float: left;
+  border-left: 2px solid black;
+  padding: 1em;
+  background: linear-gradient(90deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0) 100%);
+}
+.slider_right {
+  text-align: right;
+  width: 90%;
+  float: right;
+  border-right: 2px solid black;
+  padding: 1em;
+  background: linear-gradient(-90deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0) 100%);
+}
 
 .design-comment { color: #ccc; font-style: italic;}
     "))
@@ -277,11 +293,6 @@ server <- function(input, output, session) {
     judging_method <<- assigned_study[["judging_method"]]
     print(judge_id)
     
-    # update the nav
-    shinyjs::addClass(id = "tab1", class = "disabled")
-    shinyjs::removeClass(id = "tab1", class = "active")
-    shinyjs::addClass(id = "tab2", class = "active")
-    shinyjs::removeClass(id = "tab2", class = "disabled")
     
     # update the page content
     output$pageContent <- renderUI({
@@ -421,12 +432,9 @@ server <- function(input, output, session) {
       tagList(
         htmlOutput("judging_progress"),
         h3(assigned_study[["judging_prompt"]]),
-        p("Both modes of judging are shown here for convenience - participants will only see one!", class = "design-comment"),
-        p("Binary decisions", class = "design-comment"),
         fluidRow(
           column(12, htmlOutput("binary"))
         ),
-        p("Slider rating decisions (currently set to -10 to 10):", class = "design-comment"),
         fluidRow(
           column(12, htmlOutput("slider"))
         ),
@@ -452,7 +460,7 @@ server <- function(input, output, session) {
   })
   
   output$binary <- renderUI({
-    if(judging_method == "binary" | TRUE) { # temporarily show this all the time
+    if(judging_method == "binary") {
       fluidRow(
         column(6, actionButton(
           "chooseLeft",
@@ -469,15 +477,15 @@ server <- function(input, output, session) {
   })
   
   output$slider <- renderUI({
-    if(judging_method == "slider" | TRUE) { # temporarily show this all the time
+    if(judging_method == "slider") {
       tagList(
         fluidRow(
-          column(3, p(vehicle_name(pair$left), style = "text-align:left;")),
+          column(3, p(vehicle_name(pair$left), class = "slider_left"), style = "display: flex"),
           column(6, sliderInput("choice_slider", "",
                                 min = -10, max = 10, value = 0, ticks = FALSE, width = "100%")
           ),
           #column(6, tags$input(id = "choice_slider", type = "range", min = "-10", max = "10", class = "cj_slider")),
-          column(3, p(vehicle_name(pair$right), style = "text-align:right;"))
+          column(3, p(vehicle_name(pair$right), class = "slider_right"))
         ),
         fluidRow(
           column(4, offset = 4, p(actionButton("submit_slider", "Submit decision", class = "btn-primary"), style = "text-align: center;"))
@@ -496,7 +504,7 @@ server <- function(input, output, session) {
   })
   
   output$judging_progress <- renderPrint({
-    pc <- round((pair$pair_num -1) / 100 * 100)
+    pc <- round((pair$pair_num -1) / 102 * 100)
     pc <- min(pc, 100)
     # https://getbootstrap.com/docs/3.4/components/#progress
     div(
