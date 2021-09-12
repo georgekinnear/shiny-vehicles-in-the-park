@@ -226,14 +226,33 @@ server <- function(input, output, session) {
   prolific_id <- NULL
   judge_id <- NULL
   judging_method <- NULL
+  starting_pair <- NULL # this will be set to 1 by default, but when resuming a session it will record where to start
   
-  # TODO - do something with the Prolific data
   observe({
     query <- parseQueryString(session$clientData$url_search)
     if (!is.null(query[['PROLIFIC_PID']])) {
       prolific_id <<- query[['PROLIFIC_PID']]
+      # Check if this user already exists in the DB: if so, pick up from where they left off
+      session_info <<- pool %>% tbl("judges") %>%
+        filter(prolific_id == !!prolific_id) %>%
+        arrange(-judge_id) %>%
+        collect() %>%
+        slice(1)
+      
+      if(nrow(session_info) > 0) {
+        # User has already consented - find out how many judgements they completed, and pick up where they left off
+        num_existing_judgements <- pool %>% tbl("judgements") %>%
+          filter(judge_id == !!session_info$judge_id) %>% 
+          collect() %>% 
+          nrow()
+        starting_pair <<- num_existing_judgements + 1
+      } else {
+        # ID is not recognised, so proceed as a new user
+        starting_pair <<- 1
+      }
     } else {
       prolific_id <<- "None"
+      # TODO - quit with some sort of warning
     }
   })
   
@@ -264,35 +283,48 @@ server <- function(input, output, session) {
   #
   observeEvent(input$consentButton, {
     
-    # Now they have consented, assign them to a condition
-    assigned_study <<- assign_to_study()
+    if(starting_pair > 1) {
+      # They are resuming a previous session; session_info will already have been recreated
+      print("here")
+      print(starting_pair)
+      print(session_info)
+      judge_id <<- session_info$judge_id
+      assigned_study <<- studies %>% filter(study == !!session_info$study_id)
+      judging_method <<- assigned_study[["judging_method"]]
+      print(paste("Returning judge with ID:", judge_id))
+    } else {
+      # They are a new user
     
-    # Create session_info and synch with the judges table in the database
-    ## 1. Write session info to the database
-    session_info <<- tibble(
-      shiny_info = session$token,
-      shiny_timestamp = as.character(Sys.time()),
-      study_id = assigned_study[["study"]],
-      prolific_id = prolific_id,
-    )
-    dbWriteTable(pool,
-                 "judges",
-                 session_info,
-                 row.names = FALSE,
-                 append = TRUE)
-    
-    ## 2. Update session_info to include the autoincremented judge_id produced by the database
-    session_info <<- pool %>% tbl("judges") %>%
-      filter(shiny_info == !!session_info$shiny_info) %>%
-      arrange(-judge_id) %>%
-      collect() %>%
-      slice(1)
-    
-    ## 3. Pick out the judge_id and judging_method for ease of reference later on
-    judge_id <<- session_info$judge_id
-    judging_method <<- assigned_study[["judging_method"]]
-    print(judge_id)
-    
+      # Now they have consented, assign them to a condition
+      assigned_study <<- assign_to_study()
+      
+      # Create session_info and synch with the judges table in the database
+      ## 1. Write session info to the database
+      session_info <<- tibble(
+        shiny_info = session$token,
+        shiny_timestamp = as.character(Sys.time()),
+        study_id = assigned_study[["study"]],
+        prolific_id = prolific_id,
+      )
+      dbWriteTable(pool,
+                   "judges",
+                   session_info,
+                   row.names = FALSE,
+                   append = TRUE)
+      
+      ## 2. Update session_info to include the autoincremented judge_id produced by the database
+      session_info <<- pool %>% tbl("judges") %>%
+        filter(shiny_info == !!session_info$shiny_info) %>%
+        arrange(-judge_id) %>%
+        collect() %>%
+        slice(1)
+      
+      ## 3. Pick out the judge_id and judging_method for ease of reference later on
+      judge_id <<- session_info$judge_id
+      judging_method <<- assigned_study[["judging_method"]]
+      print(judge_id)
+      
+    }
     
     # update the page content
     output$pageContent <- renderUI({
@@ -420,7 +452,7 @@ server <- function(input, output, session) {
     print(pairs)
     pair$pairs_available <- nrow(pairs)
   
-    first_pair = pairs %>% head(1)
+    first_pair = pairs %>% filter(pair_num == starting_pair)
     pair$pair_num <- first_pair$pair_num
     pair$left <- first_pair$left
     pair$right <- first_pair$right
