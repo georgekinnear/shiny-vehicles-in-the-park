@@ -337,9 +337,10 @@ server <- function(input, output, session) {
       mutate(across(c("s1", "s2"), as.integer))
     
     # systematically list all pairs, and add the counts for each
+    # (filter for item_num > 0 to exclude the attention check item at this point)
     all_pairs_status <-
-      crossing(scripts %>% select(s1 = item_num),
-               scripts %>% select(s2 = item_num)) %>%
+      crossing(scripts %>% filter(item_num > 0) %>% select(s1 = item_num),
+               scripts %>% filter(item_num > 0) %>% select(s2 = item_num)) %>%
       filter(s1 < s2) %>%
       left_join(pairs_judged, by = c("s1", "s2")) %>%
       mutate(n = replace_na(n, 0))
