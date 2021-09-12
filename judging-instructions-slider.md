@@ -4,6 +4,6 @@ Please decide: **[JUDGING PROMPT]**
 
 Use the slider to indicate the strength of your decision.
 
-After you choose one of the items, you will be shown a new pair.
+After you submit your decision, you will be shown a new pair.
 
 We are asking you to make 100 of these paired comparisons.
