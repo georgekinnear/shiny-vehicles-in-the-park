@@ -698,7 +698,7 @@ server <- function(input, output, session) {
   output$download_judges <- downloadHandler(
     filename = "judges.csv",
     content = function(file) {
-      write.csv(judges, file, row.names = FALSE)
+      write_csv(judges, file, na = "")
     }
   )
   
@@ -712,7 +712,7 @@ server <- function(input, output, session) {
   output$download_judgements <- downloadHandler(
     filename = "judgements.csv",
     content = function(file) {
-      write.csv(all_existing_judgements, file, row.names = FALSE)
+      write_csv(all_existing_judgements, file, na = "")
     }
   )
   
