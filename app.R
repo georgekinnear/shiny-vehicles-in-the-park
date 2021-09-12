@@ -168,20 +168,6 @@ server <- function(input, output, session) {
     collect() %>% 
     semi_join(studies, by = "study")
   
-  study_progress <<- all_existing_judgements %>% 
-    group_by(study, judge_id) %>% 
-    tally() %>% 
-    left_join(studies, by = "study") %>% 
-    group_by(study) %>% 
-    summarise(
-      num_judges = n_distinct(judge_id),
-      num_judgements = sum(n)
-    )
-  
-  study_status <<- studies %>% 
-    left_join(study_progress, by = "study") %>% 
-    mutate(across(starts_with("num_"), ~replace_na(.x, 0)))
-  
   judges <<- pool %>% 
     tbl("judges") %>% 
     collect() %>% 
@@ -196,6 +182,25 @@ server <- function(input, output, session) {
         collect(),
       by = "judge_id"
     )
+  
+  study_progress <<- studies %>% 
+    full_join(
+      judges %>% 
+        select(judge_id, prolific_id, study_id, num_judgements),
+      by = c("study" = "study_id")
+    )
+  study_status <<- studies %>% 
+    left_join(
+      study_progress %>%
+        group_by(study) %>%
+        summarise(
+          num_judges = n_distinct(judge_id),
+          num_judgements = sum(num_judgements, na.rm = TRUE)
+        ),
+      by = "study"
+    ) %>% 
+    mutate(across(starts_with("num_"), ~replace_na(.x, 0L)))
+  
   
   observe({
     query <- parseQueryString(session$clientData$url_search)
@@ -677,15 +682,14 @@ server <- function(input, output, session) {
   # Admin dashboard
   #
   output$judge_tally <- renderTable({
-    study_progress %>%
+    study_status %>%
       arrange(study) %>% 
       separate(study, into = c("prompt", "method"))
   })
   output$summary_table <- renderTable({
     judges %>%
       select(study_id, judge_id, prolific_id, num_judgements) %>% 
-      arrange(study_id, -num_judgements) %>% 
-      separate(study_id, into = c("prompt", "method"))
+      arrange(study_id, -num_judgements)
   })
   
   output$participants_table <- renderDT(
