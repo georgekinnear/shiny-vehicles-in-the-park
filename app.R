@@ -174,19 +174,42 @@ server <- function(input, output, session) {
     left_join(
       all_existing_judgements %>% 
         group_by(judge_id) %>% 
-        tally(name = "num_judgements"),
+        summarise(
+          num_judgements = n(),
+          time_spent_s = sum(time_taken, na.rm = TRUE)/1000
+        ),
       by = "judge_id"
     ) %>% 
     left_join(
       pool %>% tbl("comments") %>% 
         collect(),
       by = "judge_id"
+    ) %>% 
+    left_join(
+      # attention checks
+      all_existing_judgements %>% 
+        group_by(judge_id) %>% 
+        filter(left == 0 | right == 0) %>% 
+        mutate(
+          attention_check_result = case_when(
+            won == 0 ~ TRUE,
+            left == 0 & score < 0 ~ TRUE,
+            right == 0 & score > 0 ~ TRUE,
+            TRUE ~ FALSE,
+          ),
+        ) %>% 
+        summarise(
+          attention_checks = n(),
+          attention_checks_passed = sum(attention_check_result),
+          attention_checks_failed = sum(!attention_check_result)
+        ),
+      by = "judge_id"
     )
   
   study_progress <<- studies %>% 
     full_join(
       judges %>% 
-        select(judge_id, prolific_id, study_id, num_judgements),
+        select(judge_id, prolific_id, study_id, num_judgements, attention_checks_passed),
       by = c("study" = "study_id")
     )
   study_status <<- studies %>% 
@@ -688,11 +711,12 @@ server <- function(input, output, session) {
   output$judge_tally <- renderTable({
     study_status %>%
       arrange(study) %>% 
-      separate(study, into = c("prompt", "method"))
+      separate(study, into = c("prompt", "method")) %>% 
+      select(-judging_method, -judgements_per_judge)
   })
   output$summary_table <- renderTable({
     judges %>%
-      select(study_id, judge_id, prolific_id, num_judgements) %>% 
+      select(study_id, judge_id, prolific_id, num_judgements, attention_checks_passed, time_spent_s) %>% 
       arrange(study_id, -num_judgements)
   })
   
