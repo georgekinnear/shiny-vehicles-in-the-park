@@ -195,6 +195,7 @@ server <- function(input, output, session) {
         group_by(study) %>%
         summarise(
           num_judges = n_distinct(judge_id),
+          num_judges_completed = sum(num_judgements == 100, na.rm = TRUE),
           num_judgements = sum(num_judgements, na.rm = TRUE)
         ),
       by = "study"
@@ -446,10 +447,13 @@ server <- function(input, output, session) {
   observeEvent(input$startComparing, {
     
     # pairs <<- make_pairs(pairs_to_make = 100)
-    pairs <<- make_pairs(pairs_to_make = 100) %>% 
-      # add attention checks after pairs 50 and 75
+    pairs <<- make_pairs(pairs_to_make = 95) %>% 
+      # add attention checks after pairs 15, 32, 50, 75, 90
+      add_row(left = 0, right = sample(c(1:25))[1], .after = 15) %>% 
+      add_row(right = 0, left = sample(c(1:25))[1], .after = 32) %>%
       add_row(left = 0, right = sample(c(1:25))[1], .after = 50) %>% 
       add_row(right = 0, left = sample(c(1:25))[1], .after = 75) %>%
+      add_row(right = 0, left = sample(c(1:25))[1], .after = 90) %>%
       mutate(pair_num = row_number())
     print(pairs)
     pair$pairs_available <- nrow(pairs)
@@ -539,7 +543,7 @@ server <- function(input, output, session) {
   })
   
   output$judging_progress <- renderPrint({
-    pc <- round((pair$pair_num -1) / 102 * 100)
+    pc <- round((pair$pair_num -1) / 100 * 100)
     pc <- min(pc, 100)
     # https://getbootstrap.com/docs/3.4/components/#progress
     div(
@@ -632,7 +636,7 @@ server <- function(input, output, session) {
   # TODO - make this return them to the special Prolific landing page that will mark them as completed
   observe({
     if(!exists("pair")) return()
-    if (pair$pair_num <= 102) return()
+    if (pair$pair_num <= 100) return()
     
     # update the page content
     output$pageContent <- renderUI({
