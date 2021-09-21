@@ -5,8 +5,8 @@ account: george-kinnear
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4452128
-bundleId: 5024946
+bundleId: 5027369
 url: https://george-kinnear.shinyapps.io/shiny-vehicles-in-the-park/
-when: 1631455727.58215
+when: 1631526405.75091
 asMultiple: FALSE
 asStatic: FALSE

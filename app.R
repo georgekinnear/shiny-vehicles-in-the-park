@@ -281,13 +281,6 @@ server <- function(input, output, session) {
       })
     }
   })
-  
-  all_scripts_html = scripts %>%
-    mutate(html_out = purrr::map(html, ~ markdown::markdownToHTML(
-      text = .,
-      fragment.only = TRUE
-    ))) %>% 
-    mutate(html_out = paste0("<h2>Script ", item_num, "</h2>", html_out))
     
   #
   # Page 0 - consent form
@@ -297,9 +290,7 @@ server <- function(input, output, session) {
       includeMarkdown("step0-participant-info.md"),
       fluidRow(
         column(4, offset = 4, actionButton("consentButton", "I consent", class = "btn-success btn-lg btn-block", icon = icon("check")))
-      ),
-      h1("For debugging purposes, these are the scripts:"),
-      paste(all_scripts_html$html_out, collapse = "") %>% HTML() %>% withMathJax()
+      )
     )
   })
  
@@ -558,7 +549,7 @@ server <- function(input, output, session) {
   observe({
     if (is.null(input$choice_slider) || input$choice_slider == "0") {
       shinyjs::disable("submit_slider")
-      shinyjs::html("submit_slider", html = "Please move the slider")
+      shinyjs::html("submit_slider", html = "Please move the slider to indicate the strength of your decision")
     } else {
       shinyjs::enable("submit_slider")
       shinyjs::html("submit_slider", html = "Submit decision")
