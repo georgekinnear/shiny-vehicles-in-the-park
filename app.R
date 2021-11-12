@@ -503,6 +503,11 @@ server <- function(input, output, session) {
   })
   
   vehicle_name <- function(item_id) {
+    if(item_id == 0) {
+      if(judging_method == "slider") {
+        return("This is an attention check, please move the slider all the way to this side")
+      }
+    }
     scripts %>% filter(item_num == item_id) %>% pull(markdown) %>% as.character()
   }
 
