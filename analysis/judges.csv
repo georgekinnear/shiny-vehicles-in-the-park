@@ -1,0 +1,127 @@
+judge_id,shiny_info,shiny_timestamp,study_id,num_judgements,time_spent_s,final_comments,attention_checks,attention_checks_passed,attention_checks_failed
+87,c13d053f1a1961868a49aacc004f9112,17/11/2021 09:52,violation_slider,100,543.869,,5,5,0
+86,82a04de5a29db3b186599a875e4fb786,17/11/2021 09:52,violation_pairs,100,283.895,,5,5,0
+85,0d05527d2cb46b1f7e91b85000200c23,17/11/2021 09:18,vehicle_pairs,100,403.302,,5,5,0
+84,a9d706b7413c7f831b22f81867db45ba,17/11/2021 09:16,nuisance_slider,100,1048.908,,5,5,0
+83,e61bbcdf8ab8e6464aff9610bf116d14,17/11/2021 09:16,nuisance_slider,100,769.13,,5,5,0
+82,af43222902d267fcbed0e85ac9da0653,17/11/2021 09:15,nuisance_pairs,100,437.568,,5,5,0
+81,73fc463350679e5535e5da4591962e48,17/11/2021 09:15,vehicle_slider,100,747.001,,5,5,0
+80,6784bcda48b4f8d4cf260f97a4c2ca78,17/11/2021 09:15,vehicle_slider,100,969.687,thank you,5,5,0
+79,121a02e8535df7598dfe2f2238b64598,17/11/2021 09:15,vehicle_slider,,,,,,
+78,e1d90d6dea775a5999caa7bee3095da1,17/11/2021 09:15,vehicle_slider,100,790.116,,5,5,0
+77,dd52e2355094ed1742cbfd039a97b083,17/11/2021 09:15,nuisance_pairs,100,547.596,,5,5,0
+76,b568dcad338dfb206139d1e3cd669200,17/11/2021 09:14,violation_pairs,100,496.039,,5,5,0
+75,9f1e4d8c1f06d554bf9da0831e675c25,17/11/2021 09:14,violation_pairs,100,445.605,,5,5,0
+74,1921232d35cca7dfa00198b07782f8a1,17/11/2021 09:14,vehicle_pairs,100,488.204,,5,5,0
+73,c262be9f5384d657f37a8a64dc355010,17/11/2021 09:14,vehicle_pairs,100,517.398,no comments,5,5,0
+72,99a9768a2ec9240e8ac320c2f3dea881,17/11/2021 09:14,nuisance_slider,100,791.112,,5,4,1
+71,9c19a3a11cb6a749b5fe334c02b951ee,17/11/2021 09:14,nuisance_slider,100,828.458,"The context of being a nuisance was not clear - is it the noise pollution caused, the risk of accident, the inconvenience of a path being blocked?",5,5,0
+70,fb451b8ef083720768c2ed4d841a91ad,17/11/2021 09:14,nuisance_pairs,100,433.471,INteresting - I went for noisier and bigger vehicles as a greater nuisance (in most cases). I can't stand skateboards though.,5,5,0
+69,5774b0ac251672560711e0356ed47971,17/11/2021 09:14,violation_pairs,100,493.858,,5,5,0
+68,e04c807c760b9faf08a6fbbf37396dfb,17/11/2021 09:14,vehicle_slider,100,797.858,,5,5,0
+67,96e534f92989442bdd911370e375b0ac,17/11/2021 09:14,vehicle_slider,100,772.32,,5,5,0
+66,c1989046c206460cb828b03b157e9863,17/11/2021 09:14,vehicle_pairs,100,376.557,"Enjoyable survey, thank you",5,5,0
+65,837208711a044ea527cdd44e5e9f05c7,17/11/2021 09:14,nuisance_slider,100,1011.106,,5,5,0
+64,a379d0af58e9a46a6b5339a3c552eb07,17/11/2021 09:14,violation_slider,100,878.941,,5,5,0
+63,250d8c455e41767cf659450529fc764d,17/11/2021 09:14,violation_slider,100,668.471,"Hi 
+  first few was  okay but odd ones include first attention check  renew itself too fast without me doing anything. it maybe happen four times  at beginning but sorted itself normal  in  renew itself  to next one.",5,5,0
+62,bf30e26c4d1e133fc4175fb5bb264240,17/11/2021 09:14,violation_slider,100,1190.064,,5,5,0
+61,3ea1bddafc4957e053d7366175e45b89,17/11/2021 09:14,violation_slider,100,730.294,,5,5,0
+60,9cbf81f7d3e1990361ea8be2909c3f02,17/11/2021 09:14,vehicle_slider,100,782.944,,5,5,0
+59,d9eecf99e105c4dcc4bfdcb1f8e3d453,17/11/2021 09:14,vehicle_pairs,100,553.677,,5,0,5
+58,5e467e018d37dedf64bc9678a5bf4475,17/11/2021 09:13,violation_slider,100,789.352,,5,5,0
+57,161889edce9c39994a6ead2cdab399cd,17/11/2021 09:13,vehicle_slider,100,681.637,,5,5,0
+45,efa78bb7f4445f3c4c1063a88fc10034,16/11/2021 11:17,vehicle_pairs,100,320.217,,5,5,0
+46,d99468087fa4fc44fb48305710b4a663,16/11/2021 11:17,violation_pairs,100,266.522,,5,5,0
+47,292aca0327cbb4363ecae641ce30927a,16/11/2021 11:18,violation_pairs,100,321.087,,5,5,0
+48,3d70743d4517890cd19714ff30f0203d,16/11/2021 11:18,violation_pairs,100,287.887,,5,5,0
+49,f457cf782fcde2c4b5f9b839a7f5a3b5,16/11/2021 11:18,violation_slider,100,585.67,,5,5,0
+50,511c4aa9839e9f2798a58720e08bce62,16/11/2021 11:19,nuisance_pairs,100,294.003,,5,5,0
+51,46b0f02beb9c7abe55c8bd6a15ad8493,16/11/2021 11:19,nuisance_pairs,100,284.87,,5,5,0
+52,800b615ae3eda3c4aa4a272f8bb84487,16/11/2021 11:19,nuisance_pairs,100,294.368,,5,5,0
+53,914fcc67ea40c8b25859e3b494d138f8,16/11/2021 11:20,nuisance_slider,100,447.035,,5,5,0
+54,8a95b366f7437857431ae4715555088a,16/11/2021 11:20,nuisance_slider,100,781.959,"I think it would have helped it the scale on the slider had been demarcated into a number scale to help form a judgement in the decision making.
+
+Best,
+D",5,5,0
+55,39a7c7edb5427e410f331df1967a7e32,16/11/2021 11:20,vehicle_pairs,100,286.282,,5,5,0
+56,fc9bfd007049d4f67dc662a12bfa65ff,16/11/2021 11:25,vehicle_slider,100,789.548,,5,5,0
+88,066f87cb03fd0f95dad67897589cba02,17/11/2021 09:52,nuisance_pairs,100,333.063,This was one of the funniest surveys I have done!,5,5,0
+89,b4c0a0e71890a929c2f765dbf1e5e0a1,17/11/2021 09:52,nuisance_pairs,100,338.58,Difference between vehicle and automobile is? ,5,5,0
+90,2b7d4849b2b8b4999335d0a0fb0dce80,17/11/2021 09:53,vehicle_pairs,100,339.965,,5,5,0
+91,978809a9bd740a3353a24ff239949c14,17/11/2021 09:53,violation_pairs,100,382.101,"This was interesting! My criteria was on the size and neccessity of the object being there. I assume ambulances were for emergencies, so they would be acceptable - even again a baby carrier. I wasn't sure if the airplanes, drones and helicopters were on the ground? If they were overhead then there was no issue with them being there. It was a tough choice between wheelchair and ambulance though!",5,5,0
+92,4644810fbe2f2a03cd0b010ab8e054b2,17/11/2021 09:53,violation_slider,100,854.115,,5,5,0
+93,3871552c825e8f48636bdc9389a33f38,17/11/2021 09:53,violation_slider,100,660.186,,5,5,0
+94,caab570031541365a011229748ab29b0,17/11/2021 09:53,violation_slider,100,696.934,,5,5,0
+95,b207bf577f6da6e9bd319f89260371fb,17/11/2021 09:53,nuisance_slider,100,571.878,,5,5,0
+96,9b9ddcdc67bac159bedab553ea3e8115,17/11/2021 09:53,nuisance_slider,100,543.354,,5,5,0
+97,427307319deb879aa838681a58d58002,17/11/2021 09:53,nuisance_slider,100,501.859,,5,5,0
+98,486b23e0e7bf7f809d5e859db564faf7,17/11/2021 09:53,nuisance_slider,100,688.631,,5,5,0
+99,b0db75b61c49ec9d4c4134332df24853,17/11/2021 09:53,vehicle_pairs,100,386.232,,5,5,0
+100,04a5ade45eeaac9541df7ce55750112c,17/11/2021 09:53,violation_pairs,100,326.758,,5,5,0
+101,d48e2224ac5011a798eaa39086f44710,17/11/2021 09:54,nuisance_pairs,100,322.773,,5,5,0
+102,d6092b4ee8217589bae87526698e235b,17/11/2021 09:55,vehicle_pairs,100,320.452,,5,5,0
+103,cfe1b87c855e95f96f636f2689f7eb38,17/11/2021 09:55,vehicle_pairs,100,360.023,,5,4,1
+104,a1397413a77e93f2d4346aa3536670e2,17/11/2021 09:56,vehicle_slider,100,1151.313,,5,5,0
+105,59fd2774c7102ee61eceafbeb655e1b3,17/11/2021 09:58,violation_pairs,100,321.908,,5,5,0
+106,e512d26d24496070faf9c30a787a5ea0,17/11/2021 10:17,nuisance_pairs,100,413.619,,5,5,0
+107,fe018858012be5ec99a167aa79afa013,17/11/2021 10:18,vehicle_slider,100,481.175,,5,5,0
+108,5c36a3c7ae66ea5b138a2e32afd0b45e,17/11/2021 10:18,vehicle_slider,100,773.006,,5,5,0
+109,05a4bc8d4bd91bf229555fae85b4057e,17/11/2021 10:18,violation_pairs,100,269.213,,5,5,0
+110,d2f6335b8bc7683d288c16992344e3d1,17/11/2021 10:18,violation_pairs,100,245.217,,5,3,2
+111,09fd4da4d12ad7ba8920568baf159241,17/11/2021 10:18,violation_slider,100,731.647,,5,5,0
+112,4911dd0f164619cc8f77dc1f5009f567,17/11/2021 10:18,nuisance_pairs,100,330.641,,5,5,0
+113,715e0094d9d7237d7db5c071d68a6897,17/11/2021 10:18,vehicle_pairs,100,224.284,,5,5,0
+114,a75ed55833e8bf1ced2d8af756d6423b,17/11/2021 10:18,vehicle_pairs,100,393.871,,5,5,0
+115,227ebc59dc7885acba6b79b8986e756c,17/11/2021 10:18,violation_slider,100,543.501,,5,5,0
+116,c1206dcb43c59d69e1c096fa392d4d12,17/11/2021 10:18,violation_slider,100,571.61,,5,5,0
+117,33d8c59582e5ef91bedbc6231f67ffc6,17/11/2021 10:18,violation_slider,100,636.201,,5,5,0
+118,ed7f1c8d23a83ad240be9e977b388db8,17/11/2021 10:19,nuisance_pairs,100,381.847,"I found this quite bizarre , a debrief would have been nice",5,5,0
+119,f420ced8fc24f1c34af1e3e4a1c7bba0,17/11/2021 10:19,nuisance_pairs,100,440.697,,5,5,0
+120,2be36ee5a44c2df6ecfeddb9486cff66,17/11/2021 10:20,nuisance_slider,100,1133.13,,5,5,0
+121,2e78ea596be56e50b9d3a9d74775923a,17/11/2021 10:20,nuisance_slider,100,429.112,,5,5,0
+122,471098382f84f9b81386aa796e12f387,17/11/2021 10:20,nuisance_slider,100,586.17,Fun study. Thank you for the opportunity.,5,5,0
+123,7fa85ae358bb77ecb1ef04d7f28eb6a3,17/11/2021 10:22,vehicle_slider,100,649.893,,5,5,0
+124,71d66a8c7993628df89587a76cac4f53,17/11/2021 10:23,vehicle_slider,100,765.949,,5,5,0
+125,6f80b1be8feee95b1759cde261fa0c0a,17/11/2021 10:29,violation_pairs,100,301.005,,5,5,0
+126,28c016e59bf2b78f05d5d9b6589a72b4,17/11/2021 10:46,vehicle_pairs,100,377.76,,5,5,0
+127,53732786a2cd88aca3085e330a27d68d,17/11/2021 10:46,violation_pairs,100,421.869,,5,5,0
+128,3164c2aa195ac9e2554a8f52cbb5350e,17/11/2021 10:46,nuisance_pairs,100,334.35,Thanks for the opportunity.,5,5,0
+129,c3f9ea03f2d0dfc795de15ff10ba8a88,17/11/2021 10:46,nuisance_pairs,100,358.067,,5,5,0
+130,44bed7be7b59ae87fddb4a763bd59454,17/11/2021 10:46,vehicle_pairs,100,361.951,,5,5,0
+131,e57b7a7105dd1415de7188fbf3eb5245,17/11/2021 10:47,vehicle_slider,100,436.881,Slider not always easy to use and several times finger touch the bar below and some responses were lost.. the bar should have been further away from the slider,5,5,0
+132,3d76a6e9a4b479b232b9053afb1f1edf,17/11/2021 10:47,violation_pairs,100,279.843,,5,5,0
+133,bae02c08589eb7f984616edf3024647a,17/11/2021 10:47,violation_pairs,100,340.632,,5,5,0
+134,2e0eab6a7cddf2342245a71e53847419,17/11/2021 10:47,violation_slider,100,624.468,"Some weren't really comparable. Some were essential, such and ambulance and electric wheelchair.",5,5,0
+135,efdcdfa5e529c5518178272c8bd11c31,17/11/2021 10:47,violation_slider,100,765.64,,5,5,0
+136,3665694f479d70c4217e55f1d2afc284,17/11/2021 10:47,nuisance_slider,100,1040.632,wht a strange set of queries,5,5,0
+137,a7f1d689077122463d3dd79daae32dab,17/11/2021 10:48,nuisance_slider,100,1654.195,"I based most of my judgments on the size, noise and controllability of the objects. My internet connection was very slow during completion of the task, but I can confirm that I continued to pay attention to all ratings. ",5,5,0
+138,5b73e5dc4681845eae6e7b301636ae0e,17/11/2021 10:48,nuisance_slider,100,516.28,,5,5,0
+139,169782601bf08525ba89fb2d94b01c4e,17/11/2021 10:48,nuisance_slider,100,1179.651,,5,5,0
+140,4e739d92638ca7dd2098fab9328b2167,17/11/2021 10:48,nuisance_slider,100,768.766,,5,5,0
+141,e13d74e98430bafd9bedab74b498d398,17/11/2021 10:48,nuisance_slider,100,1328.077,"Not sure about my first two/three answers, but bar that I feel all went well. Although it would have been nice to be provided a description of the park, whether this was like a nature reserve or an activity park etc",5,5,0
+142,a07c25047537f6b060b8a2f3a78ae475,17/11/2021 10:48,nuisance_slider,100,828.758,,5,5,0
+143,8b194ff9bdcbc2cf29e2a220959aec78,17/11/2021 10:49,vehicle_pairs,100,317.303,,5,5,0
+144,eb33c75f1a0be96bdea122f71a1fac9f,17/11/2021 10:50,vehicle_slider,100,634.225,,5,5,0
+145,114886c2f1271f26f90c63e6c8c898b6,17/11/2021 10:52,nuisance_pairs,100,264.934,,5,5,0
+146,3b399e71747ea4205c640479d0cf7176,17/11/2021 11:09,vehicle_pairs,100,298.587,,5,5,0
+147,b948b8303d98a6b63058cbc6a66daec7,17/11/2021 11:09,vehicle_slider,100,689.61,,5,5,0
+148,5d6714ce726e78fdedf6c197f8f82fad,17/11/2021 11:09,violation_pairs,,,,,,
+149,d38158e5488e1bbfd62c5644cc9ebb37,17/11/2021 11:09,violation_slider,100,514.39,,5,5,0
+150,a567bae84292fb13c17514e557979e7f,17/11/2021 11:10,nuisance_pairs,100,388.953,,5,5,0
+151,309cfb0809279f84f66fb8a6b03ab3f7,17/11/2021 11:10,vehicle_pairs,100,300.354,,5,5,0
+152,e565aaf374c3acfe0896d679110ea833,17/11/2021 11:10,vehicle_slider,100,559.542,,5,5,0
+153,a0798ca0ff39329b7d4217591c0d6f21,17/11/2021 11:10,violation_pairs,100,422.962,,5,5,0
+154,5892e658cc2d244733f5d2334d03e710,17/11/2021 11:10,violation_slider,100,825.708,no,5,5,0
+155,fb023947eb7722c723dcfaa4a1428d7e,17/11/2021 11:10,violation_slider,100,659.209,"There was no option to state ""neither"" when neither were considered vehicles or when there may have been a good reason for their presence.",5,5,0
+156,fe52462a79c325777c0c695f4337f430,17/11/2021 11:10,violation_slider,100,422.899,,5,5,0
+157,b77862ff382f7219b1356ffd2e35c192,17/11/2021 11:10,violation_slider,100,634.27,,5,4,1
+158,bc0fc16f7bf36afc24c69c5aed6ba1c5,17/11/2021 11:10,nuisance_pairs,100,385.271,,5,5,0
+159,1739bb268d83038d81c96eabaaea0236,17/11/2021 11:10,vehicle_pairs,100,331.631,NEAR THE START I PRESSED ONE BY MISTAKE BEFORE READING IT BUT THAT WAS MY ONLY MISTAKE I THINK,5,4,1
+160,e0e2006a9ee9acc9c2adb7c777e4fe14,17/11/2021 11:10,vehicle_slider,100,783.499,,5,5,0
+161,98ab033cb8beead4068439130e7ed754,17/11/2021 11:11,violation_pairs,100,299.98,,5,5,0
+162,f016973edc5172a442fd1217c04fd873,17/11/2021 11:12,nuisance_pairs,100,582.551,"I went for the options which adversely affected the most amount of people, either from a privacy, safety or intrusion perspective.  However, where the choice was between something which was necessary for health and safety, or disability needs I took the view that these would be tolerated more than other items.  For example, someone using crutches on a crowded path in a park could be obstructive to others but most people would view it philosphically and accept it was necessary, whereas the drone buzzing overhead could be annoying everyone (noise, fear of it crashing, what it was filming).",5,5,0
+163,e7bdf54c7d1258c4fa6ced98bf5e9b45,17/11/2021 11:12,nuisance_pairs,100,435.336,,5,4,1
+164,24c8e20d70d48093d66d96a64f9954cd,17/11/2021 11:14,vehicle_pairs,100,469.886,,5,5,0
+165,4b40df13f1f89f5cb8cb2362de5bff9c,17/11/2021 11:15,vehicle_pairs,100,216.351,,5,5,0
+166,3f3284c90897aeb6514f64295ea868fd,17/11/2021 11:16,vehicle_pairs,100,246.322,,5,5,0

@@ -1,0 +1,134 @@
+---
+title: "Vehicles in the park"
+output: 
+  html_document: 
+    code_folding: hide
+    df_print: paged
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+scripts <- read_csv("scripts.csv")
+all_existing_judgements <- read_csv("judgements.csv")
+
+source("cj_functions.R")
+```
+
+# Judgement data
+
+```{r}
+all_existing_judgements %>% 
+  group_by(study, judge_id) %>% 
+  tally(name = "judgements_made_each") %>% 
+  group_by(study, judgements_made_each) %>% 
+  tally(name = "num_judges") %>% 
+  relocate(num_judges, .before = judgements_made_each)
+```
+
+
+```{r}
+# convert the slider scores to binary judgements
+binary_judgements <- all_existing_judgements %>% 
+  mutate(
+    won = case_when(
+      is.na(score) ~ won,
+      score > 0 ~ right,
+      score < 0 ~ left
+    ),
+    lost = case_when(
+      is.na(score) ~ lost,
+      score > 0 ~ left,
+      score < 0 ~ right
+    )
+  ) %>% 
+  # remove the attention checks
+  filter(left != 0, right !=0) %>% 
+  # remove the few cases where judges managed somehow to submit a slider score of 0
+  filter(!is.na(won))
+```
+
+# Fit the Bradley-Terry model
+
+```{r results='hide'}
+btm_results <- binary_judgements %>% 
+  # group the judgements by study and fit the BT model
+  nest(csv_content = !c(study)) %>% 
+  mutate(
+    btm_stuff = map(csv_content, btm_for_cj, chosen_col = "won", notchosen_col = "lost", judge_col = "judge_id")
+  ) %>% 
+  unnest(cols = c(btm_stuff))
+```
+
+```{r}
+btm_results %>% 
+  select(-csv_content) %>% 
+  mutate(ssr = as.numeric(ssr)) %>% 
+  arrange(study)
+```
+
+## Item scores
+
+The `btm_results` object includes `btm_estimates` giving the scores for each item. We write all these details out to `btm_estimates.csv`:
+
+```{r}
+btm_estimates <- btm_results %>% 
+  select(study, btm_estimates) %>% 
+  unnest(cols = c(btm_estimates)) %>% 
+  select(-id) %>% 
+  left_join(scripts %>% select(individual = item_num, word = item_name), by = "individual") %>% 
+  relocate(word, .after = individual)
+
+btm_estimates %>% 
+  write_csv("btm_estimates.csv")
+
+btm_estimates
+```
+
+Here is a visualisation of all the item scores in each study group, also saved to `btm_results.pdf`:
+
+```{r fig.height=7, fig.width=10, warning=FALSE}
+library(ggrepel)
+theme_set(theme_minimal())
+
+btm_estimates %>%
+  left_join(btm_results %>% select(study, ssr, N_A), by = "study") %>% 
+  mutate(panel_label = paste(" N = ", N_A, "\nSSR =", round(as.numeric(ssr), digits = 3))) %>% 
+  group_by(study) %>% 
+  arrange(theta) %>% 
+  mutate(order = row_number()) %>% 
+  ggplot(aes(x = order, y = theta, ymin = theta - se.theta, ymax = theta + se.theta)) +
+  geom_hline(yintercept = 0, colour = "grey") +
+  geom_pointrange(size = 0.25) +
+  geom_text_repel(aes(label = word), box.padding = 0.3, min.segment.length = 0.5, colour = "#777777") +
+  geom_text(
+    mapping = aes(x = -Inf, y = Inf, label = panel_label),
+    hjust   = -0.1,
+    vjust   = 1
+  ) +
+  facet_grid(cols = vars(study), scales = "free") +
+  theme(
+    axis.text.x = element_blank(),
+    strip.text.x = element_text(size = 12, face = "bold"),
+  ) +
+  labs(x = "")
+ggsave("btm_results.pdf", units = "cm", width = 45, height = 25)
+```
+
+## Judge fits
+
+A few judges have infit scores that are out of line with the majority of judges:
+
+```{r}
+judge_fits <- btm_results %>% 
+  select(study, judge_fits) %>% 
+  unnest(cols = c(judge_fits))
+
+judge_fits %>% 
+  ggplot(aes(y = infit, x = judgeName)) +
+  geom_point(alpha = 0.1) +
+  geom_text(aes(label = judgeName)) +
+  facet_grid(cols = vars(study))
+
+```
